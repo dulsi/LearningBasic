@@ -112,6 +112,9 @@ func factor():
 		TOKENIZER_NUMBER:
 			r = tokenizer_num()
 			accept(TOKENIZER_NUMBER)
+		TOKENIZER_STRING:
+			r = tokenizer_string()
+			accept(TOKENIZER_STRING)
 		TOKENIZER_LEFTPAREN:
 			accept(TOKENIZER_LEFTPAREN)
 			r = expr()
@@ -412,6 +415,10 @@ func get_next_token():
 				return kt[1]
 	if program[ptr] >= ord('a') && program[ptr] <= ord('z'):
 		nextptr = ptr + 1
+		while program[nextptr] >= ord('a') && program[nextptr] <= ord('z'):
+			nextptr = nextptr + 1
+		if program[nextptr] == ord('$'):
+			nextptr = nextptr + 1
 		return TOKENIZER_VARIABLE
 	return TOKENIZER_ERROR
 
