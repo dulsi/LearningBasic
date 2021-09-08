@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://basic.gd" type="Script" id=1]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_right = 535.0
+margin_bottom = 489.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 575.0
+margin_top = 10.0
+margin_right = 671.0
+margin_bottom = 93.0
+text = "Run"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 573.0
+margin_top = 116.0
+margin_right = 669.0
+margin_bottom = 199.0
+text = "Step"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
+[connection signal="pressed" from="Button" to="TextEdit" method="_on_Button_pressed"]
+[connection signal="pressed" from="Button2" to="TextEdit" method="_on_Button2_pressed"]
