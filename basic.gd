@@ -1,6 +1,7 @@
 extends TextEdit
 
 var running = 0
+signal output_screen(t)
 
 #tokenizer
 var program = []
@@ -213,14 +214,16 @@ func print_statement():
 	accept(TOKENIZER_PRINT)
 	while !acceptend():
 		if tokenizer_token() == TOKENIZER_COMMA:
-			print(" ")
+			emit_signal("output_screen", " ")
 			tokenizer_next();
 		elif tokenizer_token() == TOKENIZER_SEMICOLON:
 			tokenizer_next();
 		elif tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER || tokenizer_token() == TOKENIZER_LEFTPAREN || tokenizer_token() == TOKENIZER_STRING:
-			print(expr())
+			var a = expr()
+			emit_signal("output_screen", a)
 		else:
 			break
+	emit_signal("output_screen", "\n")
 
 func if_statement():
 	accept(TOKENIZER_IF)

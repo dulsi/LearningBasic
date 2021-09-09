@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://basic.gd" type="Script" id=1]
+[ext_resource path="res://OutputScreen.gd" type="Script" id=2]
 
 [node name="Node2D" type="Node2D"]
 
@@ -40,9 +41,11 @@ margin_top = 291.0
 margin_right = 782.0
 margin_bottom = 488.0
 custom_colors/font_color = Color( 0.176471, 0.694118, 0, 1 )
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="output_screen" from="TextEdit" to="OutputScreen" method="_on_add_text"]
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
 [connection signal="pressed" from="Button2" to="TextEdit" method="_on_Button2_pressed"]
