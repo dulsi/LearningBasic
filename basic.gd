@@ -1,9 +1,7 @@
 extends TextEdit
 
+var running = 0
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 #tokenizer
 var program = []
 var ptr = 0
@@ -214,19 +212,15 @@ func goto_statement():
 func print_statement():
 	accept(TOKENIZER_PRINT)
 	while !acceptend():
-		if tokenizer_token() == TOKENIZER_STRING:
-			print(tokenizer_string())
-			tokenizer_next()
-		elif tokenizer_token() == TOKENIZER_COMMA:
+		if tokenizer_token() == TOKENIZER_COMMA:
 			print(" ")
 			tokenizer_next();
 		elif tokenizer_token() == TOKENIZER_SEMICOLON:
 			tokenizer_next();
-		elif tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER || tokenizer_token() == TOKENIZER_LEFTPAREN:
+		elif tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER || tokenizer_token() == TOKENIZER_LEFTPAREN || tokenizer_token() == TOKENIZER_STRING:
 			print(expr())
 		else:
 			break
-		pass
 
 func if_statement():
 	accept(TOKENIZER_IF)
@@ -415,9 +409,9 @@ func get_next_token():
 				return kt[1]
 	if program[ptr] >= ord('a') && program[ptr] <= ord('z'):
 		nextptr = ptr + 1
-		while program[nextptr] >= ord('a') && program[nextptr] <= ord('z'):
+		while nextptr < program.size() && program[nextptr] >= ord('a') && program[nextptr] <= ord('z'):
 			nextptr = nextptr + 1
-		if program[nextptr] == ord('$'):
+		if nextptr < program.size() && program[nextptr] == ord('$'):
 			nextptr = nextptr + 1
 		return TOKENIZER_VARIABLE
 	return TOKENIZER_ERROR
@@ -473,17 +467,39 @@ func tokenizer_variable_name():
 func tokenizer_pos():
 	return ptr
 
+func find_line():
+	if ptr == 0:
+		return 0
+	if ptr == program.size():
+		return 0
+	var line = 0
+	for i in range(ptr):
+		if program[i] == ord('\n'):
+			line = line + 1
+	return line
+
 func _on_TextEdit_text_changed():
-	pass # Replace with function body.
+	running = 0
+	deselect()
 
 
 func _on_Button_pressed():
 	print("Start")
 	ubasic_init()
 	ubasic_run()
-	pass # Replace with function body.
+	if !ubasic_finished():
+		running = 1
 
 
 func _on_Button2_pressed():
+	if running == 0:
+		ubasic_init()
+		running = 1
 	if !ubasic_finished():
 		ubasic_run()
+	if ubasic_finished():
+		running = 0
+		deselect()
+	else:
+		var line = find_line()
+		select(line, 0, line, 1000)
