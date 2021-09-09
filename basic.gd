@@ -73,7 +73,7 @@ var for_stack = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	focus_mode = FOCUS_CLICK
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

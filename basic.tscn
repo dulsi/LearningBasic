@@ -7,6 +7,8 @@
 [node name="TextEdit" type="TextEdit" parent="."]
 margin_right = 535.0
 margin_bottom = 489.0
+focus_mode = 1
+custom_colors/font_color = Color( 0.176471, 0.694118, 0, 1 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -32,6 +34,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OutputScreen" type="TextEdit" parent="."]
+margin_left = 575.0
+margin_top = 291.0
+margin_right = 782.0
+margin_bottom = 488.0
+custom_colors/font_color = Color( 0.176471, 0.694118, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
-[connection signal="pressed" from="Button" to="TextEdit" method="_on_Button_pressed"]
 [connection signal="pressed" from="Button2" to="TextEdit" method="_on_Button2_pressed"]
