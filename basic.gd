@@ -487,11 +487,8 @@ func _on_TextEdit_text_changed():
 
 
 func _on_Button_pressed():
-	print("Start")
-	ubasic_init()
-	ubasic_run()
-	if !ubasic_finished():
-		running = 1
+	_on_Button2_pressed()
+	$NextStep.start()
 
 
 func _on_Button2_pressed():
@@ -506,3 +503,19 @@ func _on_Button2_pressed():
 	else:
 		var line = find_line()
 		select(line, 0, line, 1000)
+
+
+func _on_NextStep_timeout():
+	if !ubasic_finished():
+		ubasic_run()
+	if ubasic_finished():
+		running = 0
+		deselect()
+		$NextStep.stop()
+	else:
+		var line = find_line()
+		select(line, 0, line, 1000)
+
+
+func _on_Stop_pressed():
+	$NextStep.stop()

@@ -15,21 +15,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="."]
-margin_left = 575.0
-margin_top = 10.0
-margin_right = 671.0
-margin_bottom = 93.0
+[node name="NextStep" type="Timer" parent="TextEdit"]
+wait_time = 0.2
+
+[node name="Run" type="Button" parent="."]
+margin_left = 108.0
+margin_top = 495.0
+margin_right = 193.0
+margin_bottom = 560.0
 text = "Run"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button2" type="Button" parent="."]
-margin_left = 573.0
-margin_top = 116.0
-margin_right = 669.0
-margin_bottom = 199.0
+[node name="Step" type="Button" parent="."]
+margin_left = 208.0
+margin_top = 496.0
+margin_right = 288.0
+margin_bottom = 561.0
 text = "Step"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -46,6 +49,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Stop" type="Button" parent="."]
+margin_left = 12.0
+margin_top = 494.0
+margin_right = 91.0
+margin_bottom = 558.0
+text = "Stop"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="output_screen" from="TextEdit" to="OutputScreen" method="_on_add_text"]
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
-[connection signal="pressed" from="Button2" to="TextEdit" method="_on_Button2_pressed"]
+[connection signal="timeout" from="TextEdit/NextStep" to="TextEdit" method="_on_NextStep_timeout"]
+[connection signal="pressed" from="Run" to="TextEdit" method="_on_Button_pressed"]
+[connection signal="pressed" from="Step" to="TextEdit" method="_on_Button2_pressed"]
+[connection signal="pressed" from="Stop" to="TextEdit" method="_on_Stop_pressed"]
