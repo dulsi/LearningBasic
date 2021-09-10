@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://basic.gd" type="Script" id=1]
 [ext_resource path="res://OutputScreen.gd" type="Script" id=2]
+[ext_resource path="res://InputScreen.gd" type="Script" id=3]
 
 [node name="Node2D" type="Node2D"]
 
@@ -43,6 +44,7 @@ margin_left = 575.0
 margin_top = 291.0
 margin_right = 782.0
 margin_bottom = 488.0
+focus_mode = 0
 custom_colors/font_color = Color( 0.176471, 0.694118, 0, 1 )
 script = ExtResource( 2 )
 __meta__ = {
@@ -59,9 +61,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="InputScreen" type="TextEdit" parent="."]
+margin_left = 579.0
+margin_top = 15.0
+margin_right = 757.0
+margin_bottom = 189.0
+focus_mode = 1
+custom_colors/font_color = Color( 0.176471, 0.694118, 0, 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="clear_screen" from="TextEdit" to="OutputScreen" method="_on_clear_screen"]
 [connection signal="output_screen" from="TextEdit" to="OutputScreen" method="_on_add_text"]
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
 [connection signal="timeout" from="TextEdit/NextStep" to="TextEdit" method="_on_NextStep_timeout"]
 [connection signal="pressed" from="Run" to="TextEdit" method="_on_Button_pressed"]
 [connection signal="pressed" from="Step" to="TextEdit" method="_on_Button2_pressed"]
 [connection signal="pressed" from="Stop" to="TextEdit" method="_on_Stop_pressed"]
+[connection signal="text_changed" from="InputScreen" to="TextEdit" method="_on_TextEdit_text_changed"]

@@ -2,6 +2,10 @@ extends TextEdit
 
 var running = 0
 signal output_screen(t)
+signal clear_screen()
+
+#input
+var input
 
 #tokenizer
 var program = []
@@ -25,6 +29,7 @@ var keywords = [
   ["rem", TOKENIZER_REM],
   ["peek", TOKENIZER_PEEK],
   ["poke", TOKENIZER_POKE],
+  ["input", TOKENIZER_INPUT],
   ["end", TOKENIZER_END]
 ]
 
@@ -48,6 +53,7 @@ enum {TOKENIZER_ERROR,
   TOKENIZER_REM,
   TOKENIZER_PEEK,
   TOKENIZER_POKE,
+  TOKENIZER_INPUT,
   TOKENIZER_END,
   TOKENIZER_COMMA,
   TOKENIZER_SEMICOLON,
@@ -80,8 +86,10 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func ubasic_init():
+func ubasic_init(inputsource):
 	variables = {}
+	input = inputsource
+	input.first_input()
 	index_free()
 	tokenizer_init(text)
 	ended = 0
@@ -294,6 +302,28 @@ func for_statement():
 		print("Error")
 	for_stack[for_variable] = [to, tokenizer_num()]
 
+
+func input_statement():
+	accept(TOKENIZER_INPUT)
+	var out = "?"
+	if tokenizer_token() == TOKENIZER_STRING:
+		out = tokenizer_string() + "?"
+		accept(TOKENIZER_STRING)
+		accept(TOKENIZER_SEMICOLON)
+	while tokenizer_token() == TOKENIZER_VARIABLE:
+		var val = input.get_input()
+		print(val)
+		out = out + val;
+		ubasic_set_variable(tokenizer_variable_name(), val)
+		accept(TOKENIZER_VARIABLE)
+		if tokenizer_token() == TOKENIZER_COMMA:
+			accept(TOKENIZER_COMMA)
+			out = out + " "
+		else:
+			break
+	emit_signal("output_screen", out + "\n")
+	acceptend()
+
 func end_statement():
 	accept(TOKENIZER_END)
 	ended = 1
@@ -315,6 +345,8 @@ func statement():
 			for_statement()
 		TOKENIZER_NEXT:
 			next_statement()
+		TOKENIZER_INPUT:
+			input_statement()
 		TOKENIZER_END:
 			end_statement()
 		TOKENIZER_LET:
@@ -439,7 +471,6 @@ func tokenizer_next():
 	while ptr != program.size() && program[ptr] == ord(' '):
 		ptr += 1
 	current_token = get_next_token()
-#	print("Token:"+ String(current_token))
 	if current_token == TOKENIZER_REM:
 		while nextptr != program.size() && program[nextptr] != ord('\n'):
 			nextptr += 1
@@ -493,7 +524,8 @@ func _on_Button_pressed():
 
 func _on_Button2_pressed():
 	if running == 0:
-		ubasic_init()
+		emit_signal("clear_screen")
+		ubasic_init(get_parent().get_node("InputScreen"))
 		running = 1
 	if !ubasic_finished():
 		ubasic_run()
