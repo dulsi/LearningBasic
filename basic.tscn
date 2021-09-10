@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://basic.gd" type="Script" id=1]
 [ext_resource path="res://OutputScreen.gd" type="Script" id=2]
 [ext_resource path="res://InputScreen.gd" type="Script" id=3]
 [ext_resource path="res://RightPanel.gd" type="Script" id=4]
+[ext_resource path="res://manual.gd" type="Script" id=5]
 
 [node name="Node2D" type="Node2D"]
 
@@ -116,6 +117,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Manual" type="Control" parent="RightPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -404.0
+margin_bottom = -487.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="RightPanel/Manual"]
+margin_right = 443.0
+margin_bottom = 522.0
+bbcode_enabled = true
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="clear_screen" from="TextEdit" to="RightPanel/WorkTab/OutputScreen" method="_on_clear_screen"]
 [connection signal="output_screen" from="TextEdit" to="RightPanel/WorkTab/OutputScreen" method="_on_add_text"]
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
@@ -124,3 +143,4 @@ __meta__ = {
 [connection signal="pressed" from="Step" to="TextEdit" method="_on_Step_pressed"]
 [connection signal="pressed" from="Stop" to="TextEdit" method="_on_Stop_pressed"]
 [connection signal="text_changed" from="RightPanel/WorkTab/InputScreen" to="TextEdit" method="_on_TextEdit_text_changed"]
+[connection signal="meta_clicked" from="RightPanel/Manual/RichTextLabel" to="RightPanel/Manual/RichTextLabel" method="_on_RichTextLabel_meta_clicked"]
