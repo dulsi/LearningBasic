@@ -70,6 +70,9 @@ enum {TOKENIZER_ERROR,
   TOKENIZER_LT,
   TOKENIZER_GT,
   TOKENIZER_EQ,
+  TOKENIZER_NE,
+  TOKENIZER_LTE,
+  TOKENIZER_GTE,
   TOKENIZER_CR}
 #ubasic
 var ended = 0
@@ -136,6 +139,15 @@ func term():
 	while op == TOKENIZER_ASTR || op == TOKENIZER_SLASH || op == TOKENIZER_MOD:
 		tokenizer_next()
 		var f2 = factor()
+		if typeof(f1) == TYPE_STRING || typeof(f2) == TYPE_STRING:
+			var op_string = "*"
+			if op == TOKENIZER_SLASH:
+				op_string = "/"
+			elif op == TOKENIZER_MOD:
+				op_string = "%"
+			emit_signal("output_screen", "Runtime Error: String cannot perform this operation: " + String(f1) + op_string + String(f2) + "\n")
+			_on_Stop_pressed()
+			break
 		match op:
 			TOKENIZER_ASTR:
 				f1 = f1 * f2
@@ -152,6 +164,19 @@ func expr():
 	while op == TOKENIZER_PLUS || op == TOKENIZER_MINUS || op == TOKENIZER_AND || op == TOKENIZER_OR:
 		tokenizer_next()
 		var t2 = term()
+		if (typeof(t1) == TYPE_STRING || typeof(t2) == TYPE_STRING) && op != TOKENIZER_PLUS:
+			var op_string = "-"
+			if op == TOKENIZER_AND:
+				op_string = "&"
+			elif op == TOKENIZER_OR:
+				op_string = "|"
+			emit_signal("output_screen", "Runtime Error: String cannot perform this operation: " + String(t1) + op_string + String(t2) + "\n")
+			_on_Stop_pressed()
+			break
+		if typeof(t1) != typeof(t2) && op == TOKENIZER_PLUS:
+			emit_signal("output_screen", "Runtime Error: Variables of different type cannot perform this operation: " + String(t1) + "+" + String(t2) + "\n")
+			_on_Stop_pressed()
+			break
 		match op:
 			TOKENIZER_PLUS:
 				t1 = t1 + t2
@@ -167,16 +192,33 @@ func expr():
 func relation():
 	var r1 = expr()
 	var op = tokenizer_token()
-	while op == TOKENIZER_LT || op == TOKENIZER_GT || op == TOKENIZER_EQ:
+	while op == TOKENIZER_LT || op == TOKENIZER_GT || op == TOKENIZER_EQ || op == TOKENIZER_LTE || op == TOKENIZER_GTE || op == TOKENIZER_NE:
 		tokenizer_next()
 		var r2 = expr()
+		if (typeof(r1) == TYPE_STRING || typeof(r2) == TYPE_STRING) && (op != TOKENIZER_EQ && op != TOKENIZER_NE):
+			var op_string = "<"
+			if op == TOKENIZER_GT:
+				op_string = ">"
+			elif op == TOKENIZER_GTE:
+				op_string = ">="
+			elif op == TOKENIZER_LTE:
+				op_string = "<="
+			emit_signal("output_screen", "Runtime Error: String cannot perform this operation: " + String(r1) + op_string + String(r2) + "\n")
+			_on_Stop_pressed()
+			break
 		match op:
 			TOKENIZER_LT:
 				r1 = r1 < r2
 			TOKENIZER_GT:
 				r1 = r1 > r2
+			TOKENIZER_LTE:
+				r1 = r1 <= r2
+			TOKENIZER_GTE:
+				r1 = r1 >= r2
 			TOKENIZER_EQ:
 				r1 = r1 == r2
+			TOKENIZER_NE:
+				r1 = r1 != r2
 		op = tokenizer_token()
 	return r1
 	
@@ -280,14 +322,16 @@ func next_statement():
 	accept(TOKENIZER_VARIABLE)
 	var for_values = for_stack.get(for_variable)
 	if for_values == null:
-		print("Error")
+		emit_signal("output_screen", "Runtime Error: No for loop index named: " + for_variable + "\n")
+		_on_Stop_pressed()
 	else:
 		ubasic_set_variable(for_variable, ubasic_get_variable(for_variable) + 1)
 		if ubasic_get_variable(for_variable) <= for_values[0]:
 			jump_linenum(for_values[1])
 		else:
 			if ubasic_get_variable(for_variable) > for_values[0] + 1:
-				print("Error")
+				emit_signal("output_screen", "Runtime Error: For loop index already at max value: " + for_variable + "\n")
+				_on_Stop_pressed()
 			acceptend()
 
 func for_statement():
@@ -423,8 +467,28 @@ func get_next_token():
 				return TOKENIZER_NUMBER
 		return TOKENIZER_ERROR
 	elif singlechar():
+		var t1 = singlechar()
 		nextptr = ptr + 1
-		return singlechar()
+		if t1 == TOKENIZER_LT:
+			ptr = ptr + 1
+			var t2 = singlechar()
+			if t2 == TOKENIZER_GT:
+				t1 = TOKENIZER_NE
+				nextptr = ptr + 1
+			elif t2 == TOKENIZER_EQ:
+				t1 = TOKENIZER_LTE
+				nextptr = ptr + 1
+			else:
+				ptr = ptr - 1
+		if t1 == TOKENIZER_GT:
+			ptr = ptr + 1
+			var t2 = singlechar()
+			if t2 == TOKENIZER_EQ:
+				t1 = TOKENIZER_GTE
+				nextptr = ptr + 1
+			else:
+				ptr = ptr - 1
+		return t1
 	elif program[ptr] == ord('"'):
 		nextptr = ptr + 1
 		while nextptr != program.size() && program[nextptr] != ord('"'):
@@ -532,9 +596,8 @@ func _on_Step_pressed():
 	if !ubasic_finished():
 		ubasic_run()
 	if ubasic_finished():
-		running = 0
-		deselect()
-	else:
+		_on_Stop_pressed()
+	elif running == 1:
 		var line = find_line()
 		select(line, 0, line, 1000)
 
@@ -543,13 +606,13 @@ func _on_NextStep_timeout():
 	if !ubasic_finished():
 		ubasic_run()
 	if ubasic_finished():
-		running = 0
-		deselect()
-		$NextStep.stop()
-	else:
+		_on_Stop_pressed()
+	elif running == 1:
 		var line = find_line()
 		select(line, 0, line, 1000)
 
 
 func _on_Stop_pressed():
+	running = 0
+	deselect()
 	$NextStep.stop()
