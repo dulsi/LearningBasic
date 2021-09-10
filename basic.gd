@@ -312,8 +312,10 @@ func input_statement():
 		accept(TOKENIZER_SEMICOLON)
 	while tokenizer_token() == TOKENIZER_VARIABLE:
 		var val = input.get_input()
-		print(val)
+		var nm = tokenizer_variable_name()
 		out = out + val;
+		if !nm.ends_with("$"):
+			val = int(val)
 		ubasic_set_variable(tokenizer_variable_name(), val)
 		accept(TOKENIZER_VARIABLE)
 		if tokenizer_token() == TOKENIZER_COMMA:
@@ -517,12 +519,12 @@ func _on_TextEdit_text_changed():
 	deselect()
 
 
-func _on_Button_pressed():
-	_on_Button2_pressed()
+func _on_Run_pressed():
+	_on_Step_pressed()
 	$NextStep.start()
 
 
-func _on_Button2_pressed():
+func _on_Step_pressed():
 	if running == 0:
 		emit_signal("clear_screen")
 		ubasic_init(get_parent().get_node("InputScreen"))
