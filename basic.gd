@@ -206,6 +206,13 @@ func relation():
 			emit_signal("output_screen", "Runtime Error: String cannot perform this operation: " + String(r1) + op_string + String(r2) + "\n")
 			_on_Stop_pressed()
 			break
+		if typeof(r1) != typeof(r2) && (op == TOKENIZER_EQ || op == TOKENIZER_NE):
+			var op_string = "="
+			if op == TOKENIZER_NE:
+				op_string = "<>"
+			emit_signal("output_screen", "Runtime Error: Variables of different type cannot perform this operation: " + String(r1) + op_string + String(r2) + "\n")
+			_on_Stop_pressed()
+			break
 		match op:
 			TOKENIZER_LT:
 				r1 = r1 < r2
@@ -246,7 +253,8 @@ func jump_linenum_slow(linenum):
 		if tokenizer_token() != TOKENIZER_ENDOFINPUT:
 			index_add(tokenizer_num(), tokenizer_pos())
 		else:
-			print("Error")
+			emit_signal("output_screen", "Runtime Error: Line " + String(linenum) + " not found\n")
+			_on_Stop_pressed()
 			break
 
 func jump_linenum(linenum):
@@ -591,7 +599,7 @@ func _on_Run_pressed():
 func _on_Step_pressed():
 	if running == 0:
 		emit_signal("clear_screen")
-		ubasic_init(get_parent().get_node("InputScreen"))
+		ubasic_init(get_parent().get_node("RightPanel").get_node("WorkTab").get_node("InputScreen"))
 		running = 1
 	if !ubasic_finished():
 		ubasic_run()
