@@ -139,6 +139,9 @@ func function():
 			return PoolByteArray([arg[0]]).get_string_from_ascii()
 		"asc":
 			return arg[0].to_ascii()[0]
+		"mid$":
+			var s = arg[0].to_ascii()
+			return s.subarray(arg[1] - 1, arg[1] + arg[2] - 2).get_string_from_ascii()
 
 func varfactor():
 	var r = ubasic_get_variable(tokenizer_variable_name())
