@@ -4,7 +4,7 @@ var InputTest = load("res://inputtest.gd")
 
 var running = 0
 signal output_screen(t)
-signal clear_screen()
+signal clear_screen
 
 #input
 var input
