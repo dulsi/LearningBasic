@@ -1,8 +1,22 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://images/mars_background.png" type="Texture" id=1]
 [ext_resource path="res://ItemList.gd" type="Script" id=2]
 [ext_resource path="res://MissionSelect.gd" type="Script" id=3]
+[ext_resource path="res://images/lab2.png" type="Texture" id=4]
+[ext_resource path="res://images/powerplant.png" type="Texture" id=5]
+[ext_resource path="res://images/tower2.png" type="Texture" id=6]
+[ext_resource path="res://images/tower.png" type="Texture" id=7]
+[ext_resource path="res://images/lab.png" type="Texture" id=8]
+[ext_resource path="res://images/mainbuilding.png" type="Texture" id=9]
+[ext_resource path="res://images/workshop.png" type="Texture" id=10]
+[ext_resource path="res://images/greenhouse.png" type="Texture" id=11]
+[ext_resource path="res://images/powerplant2.png" type="Texture" id=12]
+[ext_resource path="res://images/silo2.png" type="Texture" id=13]
+[ext_resource path="res://images/silo.png" type="Texture" id=14]
+[ext_resource path="res://images/workshop2.png" type="Texture" id=15]
+[ext_resource path="res://images/mainbuilding2.png" type="Texture" id=16]
+[ext_resource path="res://images/greenhouse2.png" type="Texture" id=17]
 
 [node name="MissionSelect" type="Node2D"]
 script = ExtResource( 3 )
@@ -20,5 +34,68 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Building1_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 711, 271 )
+texture = ExtResource( 9 )
+
+[node name="Building1_Bad" type="Sprite" parent="."]
+position = Vector2( 711, 271 )
+texture = ExtResource( 16 )
+
+[node name="Building2_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 612, 179 )
+texture = ExtResource( 7 )
+
+[node name="Building2_Bad" type="Sprite" parent="."]
+position = Vector2( 612, 179 )
+texture = ExtResource( 6 )
+
+[node name="Building3_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 818, 333 )
+texture = ExtResource( 10 )
+
+[node name="Building3_Bad" type="Sprite" parent="."]
+position = Vector2( 818, 333 )
+texture = ExtResource( 15 )
+
+[node name="Building4_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 726, 182 )
+texture = ExtResource( 11 )
+
+[node name="Building4_Bad" type="Sprite" parent="."]
+position = Vector2( 726, 182 )
+texture = ExtResource( 17 )
+
+[node name="Building5_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 549, 294 )
+texture = ExtResource( 8 )
+
+[node name="Building5_Bad" type="Sprite" parent="."]
+position = Vector2( 549, 294 )
+texture = ExtResource( 4 )
+
+[node name="Building6_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 660, 368 )
+texture = ExtResource( 5 )
+
+[node name="Building6_Bad" type="Sprite" parent="."]
+position = Vector2( 660, 368 )
+texture = ExtResource( 12 )
+
+[node name="Building7_Good" type="Sprite" parent="."]
+visible = false
+position = Vector2( 845, 226 )
+texture = ExtResource( 14 )
+
+[node name="Building7_Bad" type="Sprite" parent="."]
+position = Vector2( 845, 226 )
+texture = ExtResource( 13 )
 
 [connection signal="item_activated" from="ItemList" to="ItemList" method="_on_ItemList_item_activated"]
