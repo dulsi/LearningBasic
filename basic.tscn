@@ -107,12 +107,46 @@ margin_bottom = -4.0
 margin_right = 440.0
 margin_bottom = 523.0
 bbcode_enabled = true
-bbcode_text = "[center]Mission[/center]
+bbcode_text = "[center][b]Realign Solar Panels[/b][/center]
 
-Mission description here."
-text = "Mission
+Battery backup is keeping the systems running at the moment but it won't last forever. Communication with Earth is spotty. They will be sending the alignment settings.
 
-Mission description here."
+Read in numbers. Discard anything less than zero. Zero means the end of content. Print every two valid numbers separated by a space.
+
+Sample Input:
+-1
+6
+-3
+4
+8
+11
+-4
+0
+
+Sample Output:
+6 4
+8 11
+"
+text = "Realign Solar Panels
+
+Battery backup is keeping the systems running at the moment but it won't last forever. Communication with Earth is spotty. They will be sending the alignment settings.
+
+Read in numbers. Discard anything less than zero. Zero means the end of content. Print every two valid numbers separated by a space.
+
+Sample Input:
+-1
+6
+-3
+4
+8
+11
+-4
+0
+
+Sample Output:
+6 4
+8 11
+"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -123,8 +157,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
-margin_right = -404.0
-margin_bottom = -487.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="RightPanel/Manual"]
 margin_right = 443.0
