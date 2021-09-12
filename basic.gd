@@ -79,6 +79,7 @@ enum {TOKENIZER_ERROR,
   TOKENIZER_NE,
   TOKENIZER_LTE,
   TOKENIZER_GTE,
+  TOKENIZER_FUNCTION,
   TOKENIZER_CR}
 #ubasic
 var ended = 0
@@ -117,6 +118,28 @@ func acceptend():
 	else:
 		return 0
 
+func function():
+	var nm = tokenizer_variable_name()
+	accept(TOKENIZER_FUNCTION)
+	accept(TOKENIZER_LEFTPAREN)
+	var arg = []
+	while tokenizer_token() != TOKENIZER_RIGHTPAREN:
+		arg.push_back(expr())
+		if tokenizer_token() == TOKENIZER_COMMA:
+			accept(TOKENIZER_COMMA)
+		elif tokenizer_token() != TOKENIZER_RIGHTPAREN:
+			emit_signal("output_screen", "Runtime Error: Function arguments incorrect\n")
+			_on_Stop_pressed()
+			return 0
+	accept(TOKENIZER_RIGHTPAREN)
+	match nm:
+		"len":
+			return arg[0].to_ascii().size()
+		"chr$":
+			return PoolByteArray([arg[0]]).get_string_from_ascii()
+		"asc":
+			return arg[0].to_ascii()[0]
+
 func varfactor():
 	var r = ubasic_get_variable(tokenizer_variable_name())
 	accept(TOKENIZER_VARIABLE)
@@ -137,6 +160,8 @@ func factor():
 			accept(TOKENIZER_RIGHTPAREN)
 		TOKENIZER_VARIABLE:
 			r = varfactor()
+		TOKENIZER_FUNCTION:
+			r = function()
 	return r
 
 func term():
@@ -282,7 +307,7 @@ func print_statement():
 			tokenizer_next();
 		elif tokenizer_token() == TOKENIZER_SEMICOLON:
 			tokenizer_next();
-		elif tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER || tokenizer_token() == TOKENIZER_LEFTPAREN || tokenizer_token() == TOKENIZER_STRING:
+		elif tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER || tokenizer_token() == TOKENIZER_LEFTPAREN || tokenizer_token() == TOKENIZER_STRING || tokenizer_token() == TOKENIZER_FUNCTION:
 			var a = expr()
 			emit_signal("output_screen", a)
 		else:
@@ -312,7 +337,7 @@ func let_statement():
 	accept(TOKENIZER_EQ)
 	ubasic_set_variable(nm, expr())
 	if 1 != acceptend():
-		print("Error")
+		print("Error: " + String(tokenizer_token()))
 
 func gosub_statement():
 	accept(TOKENIZER_GOSUB)
@@ -530,6 +555,8 @@ func get_next_token():
 			nextptr = nextptr + 1
 		if nextptr < program.size() && program[nextptr] == ord('$'):
 			nextptr = nextptr + 1
+		if nextptr < program.size() && program[nextptr] == ord('('):
+			return TOKENIZER_FUNCTION
 		return TOKENIZER_VARIABLE
 	return TOKENIZER_ERROR
 
