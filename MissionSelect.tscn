@@ -23,6 +23,7 @@ script = ExtResource( 3 )
 
 [node name="Background" type="Sprite" parent="."]
 position = Vector2( 512, 288 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 1 )
 
 [node name="ItemList" type="ItemList" parent="."]
@@ -37,65 +38,79 @@ __meta__ = {
 
 [node name="Building1_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 711, 271 )
+position = Vector2( 705, 280 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 9 )
 
 [node name="Building1_Bad" type="Sprite" parent="."]
-position = Vector2( 711, 271 )
+position = Vector2( 705, 280 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 16 )
 
 [node name="Building2_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 612, 179 )
+position = Vector2( 514, 145 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 7 )
 
 [node name="Building2_Bad" type="Sprite" parent="."]
-position = Vector2( 612, 179 )
+position = Vector2( 514, 145 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 6 )
 
 [node name="Building3_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 818, 333 )
+position = Vector2( 864, 409 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 10 )
 
 [node name="Building3_Bad" type="Sprite" parent="."]
-position = Vector2( 818, 333 )
+position = Vector2( 864, 409 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 15 )
 
 [node name="Building4_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 726, 182 )
+position = Vector2( 683, 101 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 11 )
 
 [node name="Building4_Bad" type="Sprite" parent="."]
-position = Vector2( 726, 182 )
+position = Vector2( 683, 101 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 17 )
 
 [node name="Building5_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 549, 294 )
+position = Vector2( 499, 375 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 8 )
 
 [node name="Building5_Bad" type="Sprite" parent="."]
-position = Vector2( 549, 294 )
+position = Vector2( 499, 375 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 4 )
 
 [node name="Building6_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 660, 368 )
+position = Vector2( 640, 479 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 5 )
 
 [node name="Building6_Bad" type="Sprite" parent="."]
-position = Vector2( 660, 368 )
+position = Vector2( 640, 479 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 12 )
 
 [node name="Building7_Good" type="Sprite" parent="."]
 visible = false
-position = Vector2( 845, 226 )
+position = Vector2( 886, 159 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 14 )
 
 [node name="Building7_Bad" type="Sprite" parent="."]
-position = Vector2( 845, 226 )
+position = Vector2( 886, 159 )
+scale = Vector2( 2, 2 )
 texture = ExtResource( 13 )
 
 [connection signal="item_activated" from="ItemList" to="ItemList" method="_on_ItemList_item_activated"]

@@ -13,15 +13,18 @@ var missions = [
 				"input" : [["4"], ["-12"], ["100"], ["-9"], ["-100"], ["23"], ["-12"], ["45"], ["56"], ["111"], ["-55"], ["-100"], ["-18"], ["-10"], ["1024"], ["-999"], ["1"], ["0"]],
 				"output" : "4 100\n23 45\n56 111\n1024 1\n"
 			}
-		]
+		],
+		"building": "6"
 	}
 ]
 
+var complete = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for i in missions:
 		add_item(i["name"])
+		complete.push_back(false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,3 +34,9 @@ func _ready():
 
 func _on_ItemList_item_activated(index):
 	get_parent().set_mission(missions[index])
+
+func set_mission_complete():
+	complete[get_selected_items()[0]] = true
+	print("Building" + missions[get_selected_items()[0]]["building"] + "_Good")
+	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Good").show()
+	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Bad").hide()

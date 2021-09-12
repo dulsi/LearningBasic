@@ -9,3 +9,6 @@ func _ready():
 
 func set_mission(missioninfo):
 	emit_signal("missionscreen", missioninfo)
+
+func set_complete():
+	$ItemList.set_mission_complete()

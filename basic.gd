@@ -677,13 +677,18 @@ func _on_Test_pressed():
 	_on_Run_pressed()
 
 func next_test():
-	_on_Stop_pressed()
 	if test_data[current_test]["output"] != get_parent().get_node("RightPanel").get_node("WorkTab").get_node("OutputScreen").text:
+		_on_Stop_pressed()
+		emit_signal("clear_screen")
 		print("Test Failed")
-	emit_signal("clear_screen")
-	current_test = current_test + 1
-	if current_test < test_data.size():
-		var test_input = InputTest.new()
-		test_input.data = test_data[current_test]["input"]
-		ubasic_init(test_input)
-		running = 2
+	else:
+		emit_signal("clear_screen")
+		current_test = current_test + 1
+		if current_test < test_data.size():
+			var test_input = InputTest.new()
+			test_input.data = test_data[current_test]["input"]
+			ubasic_init(test_input)
+			running = 2
+		else:
+			_on_Stop_pressed()
+			get_parent().set_complete()

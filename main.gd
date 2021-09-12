@@ -10,8 +10,10 @@ func _ready():
 #	pass
 
 
-func _on_Basic_missionselect_screen():
+func _on_Basic_missionselect_screen(complete):
 	$Basic.hide()
+	if complete:
+		$MissionSelect.set_complete()
 	$MissionSelect.show()
 
 

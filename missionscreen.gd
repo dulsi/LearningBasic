@@ -1,15 +1,20 @@
 extends Node2D
 
-signal missionselect_screen
+signal missionselect_screen(complete)
 
+var building
+var complete = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
 func go_mission_select():
-	emit_signal("missionselect_screen")
+	emit_signal("missionselect_screen", complete)
 
 func set_mission(missioninfo):
 	$TextEdit.test_data = missioninfo["test_data"]
 	$RightPanel/Mission/RichTextLabel.set_bbcode(missioninfo["description"])
+
+func set_complete():
+	complete = true
