@@ -381,6 +381,7 @@ func input_statement():
 			out = out + " "
 		else:
 			break
+	input.finish_line()
 	if running == 1:
 		emit_signal("output_screen", out + "\n")
 	acceptend()
