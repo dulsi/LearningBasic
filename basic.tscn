@@ -169,6 +169,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Test" type="Button" parent="."]
+margin_left = 459.0
+margin_top = 497.0
+margin_right = 538.0
+margin_bottom = 561.0
+text = "Test"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="clear_screen" from="TextEdit" to="RightPanel/WorkTab/OutputScreen" method="_on_clear_screen"]
 [connection signal="output_screen" from="TextEdit" to="RightPanel/WorkTab/OutputScreen" method="_on_add_text"]
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
@@ -178,3 +188,4 @@ __meta__ = {
 [connection signal="pressed" from="Stop" to="TextEdit" method="_on_Stop_pressed"]
 [connection signal="text_changed" from="RightPanel/WorkTab/InputScreen" to="TextEdit" method="_on_TextEdit_text_changed"]
 [connection signal="meta_clicked" from="RightPanel/Manual/RichTextLabel" to="RightPanel/Manual/RichTextLabel" method="_on_RichTextLabel_meta_clicked"]
+[connection signal="pressed" from="Test" to="TextEdit" method="_on_Test_pressed"]

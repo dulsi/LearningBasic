@@ -1,11 +1,17 @@
 extends TextEdit
 
+var InputTest = load("res://inputtest.gd")
+
 var running = 0
 signal output_screen(t)
 signal clear_screen()
 
 #input
 var input
+var test_data = [
+	{ "input" : [["4"], ["-12"], ["100"], ["-9"], ["-100"], ["23"], ["-12"], ["45"], ["56"], ["111"], ["-55"], ["-100"], ["-18"], ["-10"], ["1024"], ["-999"], ["1"], ["0"]], "output" : "4 100\n23 45\n56 111\n1024 1\n"}
+]
+var current_test = 0
 
 #tokenizer
 var program = []
@@ -375,7 +381,8 @@ func input_statement():
 			out = out + " "
 		else:
 			break
-	emit_signal("output_screen", out + "\n")
+	if running == 1:
+		emit_signal("output_screen", out + "\n")
 	acceptend()
 
 func end_statement():
@@ -604,8 +611,11 @@ func _on_Step_pressed():
 	if !ubasic_finished():
 		ubasic_run()
 	if ubasic_finished():
-		_on_Stop_pressed()
-	elif running == 1:
+		if running == 2:
+			next_test()
+		else:
+			_on_Stop_pressed()
+	elif running > 0:
 		var line = find_line()
 		select(line, 0, line, 1000)
 
@@ -614,8 +624,11 @@ func _on_NextStep_timeout():
 	if !ubasic_finished():
 		ubasic_run()
 	if ubasic_finished():
-		_on_Stop_pressed()
-	elif running == 1:
+		if running == 2:
+			next_test()
+		else:
+			_on_Stop_pressed()
+	elif running > 0:
 		var line = find_line()
 		select(line, 0, line, 1000)
 
@@ -624,3 +637,25 @@ func _on_Stop_pressed():
 	running = 0
 	deselect()
 	$NextStep.stop()
+
+
+func _on_Test_pressed():
+	current_test = 0
+	var test_input = InputTest.new()
+	test_input.data = test_data[current_test]["input"]
+	emit_signal("clear_screen")
+	ubasic_init(test_input)
+	running = 2
+	_on_Run_pressed()
+
+func next_test():
+	_on_Stop_pressed()
+	if test_data[current_test]["output"] != get_parent().get_node("RightPanel").get_node("WorkTab").get_node("OutputScreen").text:
+		print("Test Failed")
+	emit_signal("clear_screen")
+	current_test = current_test + 1
+	if current_test < test_data.size():
+		var test_input = InputTest.new()
+		test_input.data = test_data[current_test]["input"]
+		ubasic_init(test_input)
+		running = 2
