@@ -18,7 +18,7 @@ var missions = [
 	},
 	{
 		"name": "Restore Communications", 
-		"description": "[center][b]Restore Communications[/b][/center]\n\nMessages are getting scrambled but they are usually consistent for a short period of time. Earth will be sending the capital letter 'A' for the start of messages. If you use asc() you can determine how much the difference is between the 'A' you should have received and what you actually received.\n\nAfter calculating the difference read in strings. Iterate over the length of the string converting each letter and storing in a new string. mid$ and chr$ will be important for this task. Stop when the translated word is \"DONE\"\n\nSample Input:\nB\nzIFMMP\nXPSME\nEPOF\n\nSample Output:\nHELLO\nWORLD",
+		"description": "[center][b]Restore Communications[/b][/center]\n\nMessages are getting scrambled but they are usually consistent for a short period of time. Earth will be sending the capital letter 'A' for the start of messages. If you use asc() you can determine how much the difference is between the 'A' you should have received and what you actually received.\n\nAfter calculating the difference read in strings. Iterate over the length of the string converting each letter and storing in a new string. mid$ and chr$ will be important for this task. Stop when the translated word is \"DONE\"\n\nSample Input:\nB\nIFMMP\nXPSME\nEPOF\n\nSample Output:\nHELLO\nWORLD",
 		"test_data": [
 			{
 				"input" : [["G"], ["ZKYZ"], ["UL"], ["HXUGJIGYZ"], ["JUTK"]],
