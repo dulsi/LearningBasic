@@ -512,6 +512,13 @@ func singlechar():
 		return TOKENIZER_EQ
 	return 0
 
+func is_alpha(c):
+	if c >= ord('a') && c <= ord('z'):
+		return true
+	if c >= ord('A') && c <= ord('Z'):
+		return true
+	return false
+
 func get_next_token():
 	if ptr == program.size():
 		return TOKENIZER_ENDOFINPUT
@@ -553,6 +560,11 @@ func get_next_token():
 		nextptr += 1
 		return TOKENIZER_STRING
 	else:
+		var alpha = 0
+		while ptr + alpha < program.size() && is_alpha(program[ptr + alpha]):
+			if program[ptr + alpha] >= ord('A') && program[ptr + alpha] <= ord('Z'):
+				program[ptr + alpha] = program[ptr + alpha] - ord('A') + ord('a')
+			alpha = alpha + 1
 		for kt in keywords:
 			var tmp = kt[0].to_utf8()
 			var good = true
