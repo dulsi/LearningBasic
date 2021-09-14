@@ -13,6 +13,8 @@ func go_mission_select():
 	emit_signal("missionselect_screen", complete)
 
 func set_mission(missioninfo):
+	$TextEdit.initial_code = missioninfo["initial_code"]
+	$TextEdit.set_text($TextEdit.initial_code)
 	$TextEdit.test_data = missioninfo["test_data"]
 	$RightPanel/Mission/RichTextLabel.set_bbcode(missioninfo["description"])
 

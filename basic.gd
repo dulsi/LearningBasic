@@ -6,6 +6,8 @@ var running = 0
 signal output_screen(t)
 signal clear_screen
 
+var initial_code
+
 #input
 var input
 var test_data = [
@@ -276,15 +278,17 @@ func index_find(linenum):
 func index_add(linenum, sourcepos):
 	if -1 != index_find(linenum):
 		return
-#	print(linenum)
 	line_index.push_back([linenum, sourcepos])
 
 func jump_linenum_slow(linenum):
 	tokenizer_goto(0)
 	while tokenizer_num() != linenum:
-		while !acceptend():
-			tokenizer_next()
-		if tokenizer_token() != TOKENIZER_ENDOFINPUT:
+		while nextptr != program.size() && program[nextptr] != ord('\n'):
+			nextptr += 1
+		if nextptr != program.size():
+			nextptr += 1
+		tokenizer_next()
+		if !tokenizer_finished():
 			index_add(tokenizer_num(), tokenizer_pos())
 		else:
 			emit_signal("output_screen", "Runtime Error: Line " + String(linenum) + " not found\n")
@@ -349,6 +353,7 @@ func gosub_statement():
 	if 1 != acceptend():
 		print("Error")
 	gosub_stack.push_back(tokenizer_num())
+	index_add(tokenizer_num(), tokenizer_pos())
 	jump_linenum(linenum)
 
 func return_statement():
@@ -444,6 +449,12 @@ func statement():
 			let_statement()
 		TOKENIZER_VARIABLE:
 			let_statement()
+		TOKENIZER_REM:
+			while nextptr != program.size() && program[nextptr] != ord('\n'):
+				nextptr += 1
+			if nextptr != program.size():
+				nextptr += 1
+			tokenizer_next()
 		_:
 			print("Error")
 
@@ -583,12 +594,6 @@ func tokenizer_next():
 	while ptr != program.size() && program[ptr] == ord(' '):
 		ptr += 1
 	current_token = get_next_token()
-	if current_token == TOKENIZER_REM:
-		while nextptr != program.size() && program[nextptr] != ord('\n'):
-			nextptr += 1
-		if nextptr != program.size():
-			nextptr += 1
-		tokenizer_next()
 
 func tokenizer_num():
 	var num = 0
