@@ -35,8 +35,10 @@ var missions = [
 		"initial_code": "\n\n1000 rem DO NOT MODIFY BELOW THIS LINE\n1010 print \"Subroutine\"\n1020 gosub 500\n1030 return\n",
 		"test_data": [
 			{
-				"input" : [["G"], ["ZKYZ"], ["UL"], ["HXUGJIGYZ"], ["JUTK"]],
-				"output" : "TEST\nOF\nBROADCAST\n"
+				"input" : [["3"]],
+				"output" : "6\nEngernizer 2\n4\n8\nEngernizer 2\n4\n8\nEngernizer 2\n4\n",
+				"match": "1000 rem DO NOT MODIFY BELOW THIS LINE\n1010 print \"Subroutine\"\n1020 gosub 500\n1030 return",
+				"replace" : "1000 gosub 500\n1010 x = 2\n1020 print \"Engernizer\", x\n1030 gosub 500\n1040 return"
 			}
 		],
 		"building": "1"

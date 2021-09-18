@@ -98,12 +98,12 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func ubasic_init(inputsource):
+func ubasic_init(pgtext, inputsource):
 	variables = {}
 	input = inputsource
 	input.first_input()
 	index_free()
-	tokenizer_init(text)
+	tokenizer_init(pgtext)
 	ended = 0
 
 func accept(t):
@@ -590,8 +590,8 @@ func tokenizer_goto(sourcepos):
 	ptr = sourcepos
 	current_token = get_next_token()
 
-func tokenizer_init(text):
-	program = text.to_utf8()
+func tokenizer_init(pgtext):
+	program = pgtext.to_utf8()
 	ptr = 0
 	nextptr = 0
 	current_token = get_next_token()
@@ -654,7 +654,7 @@ func _on_Run_pressed():
 func _on_Step_pressed():
 	if running == 0:
 		emit_signal("clear_screen")
-		ubasic_init(get_parent().get_node("RightPanel").get_node("WorkTab").get_node("InputScreen"))
+		ubasic_init(text, get_parent().get_node("RightPanel").get_node("WorkTab").get_node("InputScreen"))
 		running = 1
 	if !ubasic_finished():
 		ubasic_run()
@@ -692,7 +692,10 @@ func _on_Test_pressed():
 	var test_input = InputTest.new()
 	test_input.data = test_data[current_test]["input"]
 	emit_signal("clear_screen")
-	ubasic_init(test_input)
+	var test_text = text
+	if test_data[current_test].has("replace"):
+		test_text = test_text.replace(test_data[current_test]["match"], test_data[current_test]["replace"])
+	ubasic_init(test_text, test_input)
 	running = 2
 	_on_Run_pressed()
 
@@ -707,7 +710,10 @@ func next_test():
 		if current_test < test_data.size():
 			var test_input = InputTest.new()
 			test_input.data = test_data[current_test]["input"]
-			ubasic_init(test_input)
+			var test_text = text
+			if test_data[current_test].has("replace"):
+				test_text = test_text.replace(test_data[current_test]["match"], test_data[current_test]["replace"])
+			ubasic_init(test_text, test_input)
 			running = 2
 		else:
 			_on_Stop_pressed()
