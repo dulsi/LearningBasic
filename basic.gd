@@ -288,6 +288,8 @@ func jump_linenum_slow(linenum):
 		if nextptr != program.size():
 			nextptr += 1
 		tokenizer_next()
+		while tokenizer_token() == TOKENIZER_CR && !tokenizer_finished():
+			tokenizer_next()
 		if !tokenizer_finished():
 			index_add(tokenizer_num(), tokenizer_pos())
 		else:
@@ -459,9 +461,12 @@ func statement():
 			print("Error")
 
 func line_statement():
-	index_add(tokenizer_num(), tokenizer_pos())
-	accept(TOKENIZER_NUMBER)
-	statement()
+	while tokenizer_token() == TOKENIZER_CR && !tokenizer_finished():
+		tokenizer_next()
+	if !tokenizer_finished():
+		index_add(tokenizer_num(), tokenizer_pos())
+		accept(TOKENIZER_NUMBER)
+		statement()
 
 func ubasic_run():
 	if tokenizer_finished():
