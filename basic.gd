@@ -709,7 +709,6 @@ func next_test():
 		_on_Stop_pressed()
 		emit_signal("clear_screen")
 		get_parent().set_failed()
-		print("Test Failed")
 	else:
 		emit_signal("clear_screen")
 		current_test = current_test + 1
