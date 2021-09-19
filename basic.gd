@@ -708,6 +708,7 @@ func next_test():
 	if test_data[current_test]["output"] != get_parent().get_node("RightPanel").get_node("WorkTab").get_node("OutputScreen").text:
 		_on_Stop_pressed()
 		emit_signal("clear_screen")
+		get_parent().set_failed()
 		print("Test Failed")
 	else:
 		emit_signal("clear_screen")
