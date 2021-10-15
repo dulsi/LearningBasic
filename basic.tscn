@@ -176,6 +176,7 @@ margin_left = 459.0
 margin_top = 497.0
 margin_right = 538.0
 margin_bottom = 561.0
+rect_pivot_offset = Vector2( 13, 23 )
 text = "Test"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -248,6 +249,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Cheat" type="Button" parent="."]
+margin_left = 338.0
+margin_top = 497.0
+margin_right = 417.0
+margin_bottom = 561.0
+rect_pivot_offset = Vector2( 13, 23 )
+text = "Cheat"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="clear_screen" from="TextEdit" to="RightPanel/WorkTab/OutputScreen" method="_on_clear_screen"]
 [connection signal="output_screen" from="TextEdit" to="RightPanel/WorkTab/OutputScreen" method="_on_add_text"]
 [connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
@@ -261,3 +273,4 @@ __meta__ = {
 [connection signal="pressed" from="ReturnSelect" to="." method="go_mission_select"]
 [connection signal="pressed" from="ResultDialog/ReturnSelect2" to="." method="go_mission_select"]
 [connection signal="pressed" from="ResultDialog/CloseDialog" to="." method="go_editor"]
+[connection signal="pressed" from="Cheat" to="TextEdit" method="_on_Cheat_pressed"]

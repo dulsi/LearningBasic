@@ -12,7 +12,8 @@ var missions = [
 		"test_data": [
 			{
 				"input" : [["4"], ["-12"], ["100"], ["-9"], ["-100"], ["23"], ["-12"], ["45"], ["56"], ["111"], ["-55"], ["-100"], ["-18"], ["-10"], ["1024"], ["-999"], ["1"], ["0"]],
-				"output" : "4 100\n23 45\n56 111\n1024 1\n"
+				"output" : "4 100\n23 45\n56 111\n1024 1\n",
+				"cheat" : "10 input x\n20 if x < 0 then goto 10\n30 if x = 0 then end\n40 input y\n50 if y < 0 then goto 40\n60 if y = 0 then end\n70 print x, y\n80 goto 10\n"
 			}
 		],
 		"building": "6"
@@ -24,7 +25,8 @@ var missions = [
 		"test_data": [
 			{
 				"input" : [["G"], ["ZKYZ"], ["UL"], ["HXUGJIGYZ"], ["JUTK"]],
-				"output" : "TEST\nOF\nBROADCAST\n"
+				"output" : "TEST\nOF\nBROADCAST\n",
+				"cheat" : "10 input a$\n20 diff = asc(\"A\") - asc(a$)\n30 input c$\n40 d$ = \"\"\n50 for i = 1 to len(c$)\n60 d$ = d$ + chr$(asc(mid$(c$, i, 1)) + diff)\n70 next i\n80 if d$ = \"DONE\" then end\n90 print d$\n100 goto 30\n"
 			}
 		],
 		"building": "2"
@@ -38,7 +40,8 @@ var missions = [
 				"input" : [["3"]],
 				"output" : "6\nEngernizer 2\n4\n8\nEngernizer 2\n4\n8\nEngernizer 2\n4\n",
 				"match": "1000 rem DO NOT MODIFY BELOW THIS LINE\n1010 print \"Subroutine\"\n1020 gosub 500\n1030 return",
-				"replace" : "1000 gosub 500\n1010 x = 2\n1020 print \"Engernizer\", x\n1030 gosub 500\n1040 return"
+				"replace" : "1000 gosub 500\n1010 x = 2\n1020 print \"Engernizer\", x\n1030 gosub 500\n1040 return",
+				"cheat" : "10 input x\n20 for i = 1 to x\n30 gosub 1000\n40 next i\n50 end\n\n500 x = x * 2\n510 print x\n520 return\n\n\n1000 rem DO NOT MODIFY BELOW THIS LINE\n1010 print \"Subroutine\"\n1020 gosub 500\n1030 return\n"
 			}
 		],
 		"building": "1"
@@ -52,6 +55,7 @@ func _ready():
 	for i in missions:
 		add_item(i["name"])
 		complete.push_back(false)
+#	ScormLoad()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -66,3 +70,59 @@ func set_mission_complete():
 	complete[get_selected_items()[0]] = true
 	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Good").show()
 	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Bad").hide()
+	ScormSave()
+
+func ScormSave():
+#	for i in range(0, complete.size() - 1):
+#		if complete[i]:
+#			JavaScript.eval("ScormProcessSetValue('cmi.objectives." + String(i) + ".completion_status', 'completed');");
+#	JavaScript.eval("ScormProcessCommit();")
+	var done = true
+	for i in range(0, complete.size() - 1):
+		if !complete[i]:
+			done = false
+	if done:
+		JavaScript.eval("ScormProcessSetValue('cmi.success_status', 'passed');");
+		JavaScript.eval("ScormProcessSetValue('cmi.completion_status', 'completed');");
+
+func ScormLoad():
+	JavaScript.eval("alert(ScormProcessGetValue('cmi.objectives._count'));")
+	for i in range(0, complete.size() - 1):
+		var id = JavaScript.eval("ScormProcessGetValue('cmi.objectives." + String(i) + ".id');")
+		if id:
+			var status = JavaScript.eval("ScormProcessGetValue('cmi.objectives." + String(i) + ".completion_status');")
+			if status == "completed":
+				complete[i] = true
+				get_parent().get_node("Building" + missions[i]["building"] + "_Good").show()
+				get_parent().get_node("Building" + missions[i]["building"] + "_Bad").hide()
+		else:
+			JavaScript.eval("ScormProcessSetValue('cmi.objectives." + String(i) + ".id', '" + String(i) + "');")
+	JavaScript.eval("alert(ScormProcessGetValue('cmi.objectives._count'));")
+	JavaScript.eval("ScormProcessCommit();")
+
+func ScormLoad2():
+	JavaScript.eval("alert(ScormProcessGetValue('cmi.objectives._count'));")
+	var x = 0
+	var num = JavaScript.eval("ScormProcessGetValue('cmi.objectives._count');")
+	if typeof(num) == TYPE_STRING:
+		num = int(num)
+	if typeof(num) == TYPE_REAL:
+		num = int(num)
+	if typeof(num) == TYPE_NIL:
+		num = 0
+	#JavaScript.eval("alert('" + String(num) + ", " + String(complete.size()) + ";'")
+	x = 1
+	if num < complete.size():
+		for i in range(num, complete.size() - 1):
+			JavaScript.eval("ScormProcessSetValue('cmi.objectives." + String(i) + ".id', '" + String(i) + "');")
+			#JavaScript.eval("ScormProcessSetValue('cmi.objectives." + String(i) + ".completion_status', 'incomplete');")
+	#JavaScript.eval("alert('" + String(num) + ", " + String(complete.size()) + ";'")
+	x = 2
+	if num > 0:
+		for i in range(0, num - 1):
+			var status = JavaScript.eval("ScormProcessGetValue('cmi.objectives." + String(i) + ".completion_status');")
+			if status == "completed":
+				complete[i] = true
+				get_parent().get_node("Building" + missions[i]["building"] + "_Good").show()
+				get_parent().get_node("Building" + missions[i]["building"] + "_Bad").hide()
+	JavaScript.eval("alert(ScormProcessGetValue('cmi.objectives._count'));")

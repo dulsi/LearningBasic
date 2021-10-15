@@ -723,3 +723,7 @@ func next_test():
 		else:
 			_on_Stop_pressed()
 			get_parent().set_complete()
+
+
+func _on_Cheat_pressed():
+	text = test_data[0]["cheat"]
