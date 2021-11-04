@@ -1,0 +1,21 @@
+LEARNING BASIC ON MARS
+
+A disaster has befallen the Mars base. You need to restore the systems. Only
+the old computers survived. You will need to write BASIC programs to bring
+everything back online.
+
+TODO
+
+Simple early missions to teach BASIC
+Sounds
+Intro
+
+LICENSE
+
+Learning Basic on Mars is licensed GPL3.
+
+The BASIC interpreter is based on ubasic by Adam Dunkels
+https://github.com/adamdunkels/ubasic
+
+Images modified from Sci-Fi Strategy Mech Buildings Isometric Asset Pack by acdrnx
+https://opengameart.org/content/sci-fi-strategy-mech-buildings-isometric-asset-pack
