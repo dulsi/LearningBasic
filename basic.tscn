@@ -43,14 +43,19 @@ margin_left = 110.0
 margin_top = 502.0
 margin_right = 190.0
 margin_bottom = 562.0
+hint_tooltip = "Run"
 texture_normal = ExtResource( 8 )
 texture_pressed = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Step" type="TextureButton" parent="."]
 margin_left = 210.0
 margin_top = 502.0
 margin_right = 290.0
 margin_bottom = 562.0
+hint_tooltip = "Step"
 texture_normal = ExtResource( 12 )
 texture_pressed = ExtResource( 13 )
 
@@ -59,6 +64,7 @@ margin_left = 10.0
 margin_top = 502.0
 margin_right = 90.0
 margin_bottom = 562.0
+hint_tooltip = "Stop"
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 10 )
 __meta__ = {
@@ -206,6 +212,7 @@ margin_left = 460.0
 margin_top = 502.0
 margin_right = 540.0
 margin_bottom = 562.0
+hint_tooltip = "Test"
 texture_normal = ExtResource( 15 )
 texture_pressed = ExtResource( 14 )
 
