@@ -21,6 +21,8 @@ func set_mission(missioninfo):
 	$TextEdit.set_text($TextEdit.initial_code)
 	$TextEdit.test_data = missioninfo["test_data"]
 	$RightPanel/Mission/RichTextLabel.set_bbcode(missioninfo["description"])
+	$RightPanel/WorkTab/InputSample.set_text("Sample Input:\n" + missioninfo["sample_input"])
+	$RightPanel/WorkTab/OutputSample.set_text("Sample Output:\n" + missioninfo["sample_output"])
 	complete = false
 
 func set_complete():
