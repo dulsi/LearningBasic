@@ -64,6 +64,7 @@ func _ready():
 		complete.push_back(false)
 		code.push_back(i["initial_code"])
 #	ScormLoad()
+	FileLoad()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -74,14 +75,39 @@ func _ready():
 func _on_ItemList_item_activated(index):
 	get_parent().set_mission(missions[index], code[index])
 
+func process_mission_complete(i):
+	complete[i] = true
+	get_parent().get_node("Building" + missions[i]["building"] + "_Good").show()
+	get_parent().get_node("Building" + missions[i]["building"] + "_Bad").hide()
+
 func set_mission_complete():
-	complete[get_selected_items()[0]] = true
-	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Good").show()
-	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Bad").hide()
+	process_mission_complete(get_selected_items()[0])
 	ScormSave()
+	FileSave()
 
 func set_mission_code(new_code):
 	code[get_selected_items()[0]] = new_code
+	FileSave()
+
+func FileSave():
+	var save_game = File.new()
+	save_game.open("user://savegame.save", File.WRITE)
+	save_game.store_line(to_json(complete))
+	save_game.store_line(to_json(code))
+	save_game.close()
+
+func FileLoad():
+	var save_game = File.new()
+	if not save_game.file_exists("user://savegame.save"):
+		return
+	save_game.open("user://savegame.save", File.READ)
+	var complete2 = parse_json(save_game.get_line())
+	for i in range(0, complete2.size() - 1):
+		if complete2[i]:
+			process_mission_complete(i)
+	var code2 = parse_json(save_game.get_line())
+	for i in range(0, code2.size() - 1):
+		code[i] = code2[i]
 
 func ScormSave():
 #	for i in range(0, complete.size() - 1):
