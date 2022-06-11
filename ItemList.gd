@@ -55,12 +55,14 @@ var missions = [
 ]
 
 var complete = []
+var code = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for i in missions:
 		add_item(i["name"])
 		complete.push_back(false)
+		code.push_back(i["initial_code"])
 #	ScormLoad()
 
 
@@ -70,13 +72,16 @@ func _ready():
 
 
 func _on_ItemList_item_activated(index):
-	get_parent().set_mission(missions[index])
+	get_parent().set_mission(missions[index], code[index])
 
 func set_mission_complete():
 	complete[get_selected_items()[0]] = true
 	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Good").show()
 	get_parent().get_node("Building" + missions[get_selected_items()[0]]["building"] + "_Bad").hide()
 	ScormSave()
+
+func set_mission_code(new_code):
+	code[get_selected_items()[0]] = new_code
 
 func ScormSave():
 #	for i in range(0, complete.size() - 1):

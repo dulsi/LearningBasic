@@ -1,6 +1,6 @@
 extends Node2D
 
-signal missionselect_screen(complete)
+signal missionselect_screen(complete, code)
 
 var building
 var complete = false
@@ -11,13 +11,13 @@ func _ready():
 
 func go_mission_select():
 	$ResultDialog.hide()
-	emit_signal("missionselect_screen", complete)
+	emit_signal("missionselect_screen", complete, $TextEdit.text)
 
 func go_editor():
 	$ResultDialog.hide()
 
-func set_mission(missioninfo):
-	$TextEdit.initial_code = missioninfo["initial_code"]
+func set_mission(missioninfo, initial_code):
+	$TextEdit.initial_code = initial_code
 	$TextEdit.set_text($TextEdit.initial_code)
 	$TextEdit.test_data = missioninfo["test_data"]
 	$RightPanel/Mission/RichTextLabel.set_bbcode(missioninfo["description"])
